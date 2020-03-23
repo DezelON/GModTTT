@@ -179,6 +179,7 @@ L.search_call   = "Call Detective"
 L.search_nick   = "This is the body of {player}."
 
 L.search_role_t = "This person was a Traitor!"
+L.search_role_m = "This person was a Maniac!"
 L.search_role_d = "This person was a Detective."
 L.search_role_i = "This person was an innocent terrorist."
 

@@ -847,6 +847,8 @@ local function GetTraitorCount(ply_count)
 end
 
 local function GetManiacCount(ply_count)
+   if ply_count < GetConVar("ttt_maniac_min_players"):GetInt() then return 0 end
+
    -- get number of traitors: pct of players rounded down
    local maniac_count = math.floor(ply_count * GetConVar("ttt_maniac_pct"):GetFloat())
    -- make sure there is at least 1 traitor
@@ -899,6 +901,7 @@ function SelectRoles()
    local choice_count = #choices
    local traitor_count = GetTraitorCount(choice_count)
    local maniac_count = GetManiacCount(choice_count)
+   print("maniac_count:" .. maniac_count)
    local det_count = GetDetectiveCount(choice_count)
 
    if choice_count == 0 then return end
@@ -941,6 +944,8 @@ function SelectRoles()
          ms = ms + 1
       end
    end
+
+   print("ms:" .. ms)
 
    -- now select detectives, explicitly choosing from players who did not get
    -- traitor, so becoming detective does not mean you lost a chance to be

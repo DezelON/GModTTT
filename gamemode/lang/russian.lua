@@ -179,6 +179,7 @@ L.search_call   = "Позвать детектива"
 L.search_nick   = "Это труп {player}."
 
 L.search_role_t = "Этот человек был предателем!"
+L.search_role_m = "Этот человек был маньяком!"
 L.search_role_d = "Этот человек был детективом."
 L.search_role_i = "Этот человек был невиновным."
 

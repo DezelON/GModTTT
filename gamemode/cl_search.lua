@@ -106,6 +106,8 @@ function PreprocSearch(raw)
             search[t].text = T("search_role_t")
          elseif d == ROLE_DETECTIVE then
             search[t].text = T("search_role_d")
+         elseif d == ROLE_MANIAC then
+            search[t].text = T("search_role_m")
          else
             search[t].text = T("search_role_i")
          end
