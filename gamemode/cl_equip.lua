@@ -146,6 +146,7 @@ local color_darkened = Color(255,255,255, 80)
 -- TODO: make set of global role colour defs, these are same as wepswitch
 local color_slot = {
    [ROLE_TRAITOR]   = Color(180, 50, 40, 255),
+   [ROLE_MANIAC]   = Color(180, 50, 40, 255),
    [ROLE_DETECTIVE] = Color(50, 60, 180, 255)
 }
 

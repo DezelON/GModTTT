@@ -819,10 +819,6 @@ function GM:TTTCheckForWin()
       end
    end
 
-   -- print(traitor_alive)
-   -- print(innocent_alive)
-   -- print(maniac_alive)
-
    if maniac_alive and not traitor_alive and not innocent_alive then
       return WIN_MANIAC
    elseif traitor_alive and not innocent_alive and not maniac_alive then
@@ -901,7 +897,6 @@ function SelectRoles()
    local choice_count = #choices
    local traitor_count = GetTraitorCount(choice_count)
    local maniac_count = GetManiacCount(choice_count)
-   print("maniac_count:" .. maniac_count)
    local det_count = GetDetectiveCount(choice_count)
 
    if choice_count == 0 then return end
@@ -920,7 +915,6 @@ function SelectRoles()
       if IsValid(pply) and
          ((not table.HasValue(prev_roles[ROLE_TRAITOR], pply)) or (math.random(1, 3) == 2)) then
          pply:SetRole(ROLE_TRAITOR)
-
          table.remove(choices, pick)
          ts = ts + 1
       end
@@ -944,8 +938,6 @@ function SelectRoles()
          ms = ms + 1
       end
    end
-
-   print("ms:" .. ms)
 
    -- now select detectives, explicitly choosing from players who did not get
    -- traitor, so becoming detective does not mean you lost a chance to be
