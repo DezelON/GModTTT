@@ -139,7 +139,7 @@ local function request_rolelist(ply)
 
       if ply:IsTraitor() then
          SendTraitorList(ply)
-      elseif ply:IsManiac()
+      elseif ply:IsManiac() then
          SendManiacList(ply)
       else
          SendConfirmedTraitors(ply)
