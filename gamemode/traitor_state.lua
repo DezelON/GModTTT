@@ -9,6 +9,17 @@ end
 
 function CountTraitors() return #GetTraitors() end
 
+function GetManiacs()
+   local mns = {}
+   for k,v in ipairs(player.GetAll()) do
+      if v:GetManiac() then table.insert(mns, v) end
+   end
+
+   return mns
+end
+
+function CountManiacs() return #GetManiacs() end
+
 ---- Role state communication
 
 -- Send every player their role
@@ -51,6 +62,7 @@ end
 -- Tell traitors about other traitors
 
 function SendTraitorList(ply_or_rf, pred) SendRoleList(ROLE_TRAITOR, ply_or_rf, pred) end
+function SendManiacList(ply_or_rf, pred) SendRoleList(ROLE_MANIAC, ply_or_rf, pred) end
 function SendDetectiveList(ply_or_rf) SendRoleList(ROLE_DETECTIVE, ply_or_rf) end
 
 -- this is purely to make sure last round's traitors/dets ALWAYS get reset
@@ -60,11 +72,14 @@ function SendInnocentList(ply_or_rf)
    -- sending traitors only a list of actual innocents.
    local inno_ids = {}
    local traitor_ids = {}
+   local maniac_ids = {}
    for k, v in ipairs(player.GetAll()) do
       if v:IsRole(ROLE_INNOCENT) then
          table.insert(inno_ids, v:EntIndex())
       elseif v:IsRole(ROLE_TRAITOR) then
          table.insert(traitor_ids, v:EntIndex())
+      elseif v:IsRole(ROLE_MANIAC) then
+         table.insert(maniac_ids, v:EntIndex())
       end
    end
 
@@ -75,6 +90,7 @@ function SendInnocentList(ply_or_rf)
    -- detectives and innocents get an expanded version of the truth so that they
    -- reset everyone who is not detective
    table.Add(inno_ids, traitor_ids)
+   table.Add(inno_ids, maniac_ids)
    table.Shuffle(inno_ids)
    SendRoleListMessage(ROLE_INNOCENT, inno_ids, GetInnocentFilter())
 end
@@ -83,10 +99,15 @@ function SendConfirmedTraitors(ply_or_rf)
    SendTraitorList(ply_or_rf, function(p) return p:GetNWBool("body_found") end)
 end
 
+function SendConfirmedManiacs(ply_or_rf)
+   SendManiacList(ply_or_rf, function(p) return p:GetNWBool("body_found") end)
+end
+
 function SendFullStateUpdate()
    SendPlayerRoles()
    SendInnocentList()
    SendTraitorList(GetTraitorFilter())
+   SendManiacList(GetManiacFilter())
    SendDetectiveList()
    -- not useful to sync confirmed traitors here
 end
@@ -118,6 +139,8 @@ local function request_rolelist(ply)
 
       if ply:IsTraitor() then
          SendTraitorList(ply)
+      elseif ply:IsManiac()
+         SendManiacList(ply)
       else
          SendConfirmedTraitors(ply)
       end
@@ -145,6 +168,13 @@ local function force_traitor(ply)
    SendFullStateUpdate()
 end
 concommand.Add("ttt_force_traitor", force_traitor, nil, nil, FCVAR_CHEAT)
+
+local function force_maniac(ply)
+   ply:SetRole(ROLE_MANIAC)
+
+   SendFullStateUpdate()
+end
+concommand.Add("ttt_force_maniac", force_maniac, nil, nil, FCVAR_CHEAT)
 
 local function force_detective(ply)
    ply:SetRole(ROLE_DETECTIVE)

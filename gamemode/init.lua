@@ -74,6 +74,10 @@ CreateConVar("ttt_spawn_wave_interval", "0")
 CreateConVar("ttt_traitor_pct", "0.25")
 CreateConVar("ttt_traitor_max", "32")
 
+CreateConVar("ttt_maniac_pct", "0.12")
+CreateConVar("ttt_maniac_max", "1")
+CreateConVar("ttt_maniac_min_players", "9")
+
 CreateConVar("ttt_detective_pct", "0.13", FCVAR_NOTIFY)
 CreateConVar("ttt_detective_max", "32")
 CreateConVar("ttt_detective_min_players", "8")
@@ -88,6 +92,13 @@ CreateConVar("ttt_credits_award_repeat", "1")
 CreateConVar("ttt_credits_detectivekill", "1")
 
 CreateConVar("ttt_credits_alonebonus", "1")
+
+-- Maniac credits
+CreateConVar("ttt_man_credits_starting", "2")
+CreateConVar("ttt_man_credits_award_pct", "0.25")
+CreateConVar("ttt_man_credits_award_size", "1")
+CreateConVar("ttt_man_credits_award_repeat", "1")
+CreateConVar("ttt_man_credits_detectivekill", "1")
 
 -- Detective credits
 CreateConVar("ttt_det_credits_starting", "1")
@@ -696,6 +707,9 @@ function PrintResultMessage(type)
    elseif type == WIN_TRAITOR then
       LANG.Msg("win_traitor")
       ServerLog("Result: traitors win.\n")
+   elseif type == WIN_MANIAC then
+      LANG.Msg("win_maniac")
+      ServerLog("Result: maniac win.\n")
    elseif type == WIN_INNOCENT then
       LANG.Msg("win_innocent")
       ServerLog("Result: innocent win.\n")
@@ -780,18 +794,21 @@ end
 function GM:TTTCheckForWin()
    if ttt_dbgwin:GetBool() then return WIN_NONE end
 
-   if GAMEMODE.MapWin == WIN_TRAITOR or GAMEMODE.MapWin == WIN_INNOCENT then
+   if GAMEMODE.MapWin == WIN_TRAITOR or GAMEMODE.MapWin == WIN_MANIAC or GAMEMODE.MapWin == WIN_INNOCENT then
       local mw = GAMEMODE.MapWin
       GAMEMODE.MapWin = WIN_NONE
       return mw
    end
 
    local traitor_alive = false
+   local maniac_alive = false
    local innocent_alive = false
    for k,v in ipairs(player.GetAll()) do
-      if v:Alive() and v:IsTerror() then
+      if v:Alive() and v:IsTerror() and v:IsManiac() then
          if v:GetTraitor() then
             traitor_alive = true
+         elseif v:GetManiac() then
+            maniac_alive = true
          else
             innocent_alive = true
          end
@@ -802,7 +819,9 @@ function GM:TTTCheckForWin()
       end
    end
 
-   if traitor_alive and not innocent_alive then
+   if maniac_alive and not traitor_alive and not innocent_alive then
+      return WIN_MANIAC
+   elseif traitor_alive and not innocent_alive then
       return WIN_TRAITOR
    elseif not traitor_alive and innocent_alive then
       return WIN_INNOCENT
@@ -823,6 +842,15 @@ local function GetTraitorCount(ply_count)
    return traitor_count
 end
 
+local function GetManiacCount(ply_count)
+   -- get number of traitors: pct of players rounded down
+   local maniac_count = math.floor(ply_count * GetConVar("ttt_maniac_pct"):GetFloat())
+   -- make sure there is at least 1 traitor
+   maniac_count = math.Clamp(maniac_count, 1, GetConVar("ttt_maniac_max"):GetInt())
+
+   return maniac_count
+end
+
 
 local function GetDetectiveCount(ply_count)
    if ply_count < GetConVar("ttt_detective_min_players"):GetInt() then return 0 end
@@ -840,6 +868,7 @@ function SelectRoles()
    local prev_roles = {
       [ROLE_INNOCENT] = {},
       [ROLE_TRAITOR] = {},
+      [ROLE_MANIAC] = {},
       [ROLE_DETECTIVE] = {}
    };
 
@@ -865,6 +894,7 @@ function SelectRoles()
    -- determine how many of each role we want
    local choice_count = #choices
    local traitor_count = GetTraitorCount(choice_count)
+   local maniac_count = GetManiacCount(choice_count)
    local det_count = GetDetectiveCount(choice_count)
 
    if choice_count == 0 then return end
@@ -886,6 +916,25 @@ function SelectRoles()
 
          table.remove(choices, pick)
          ts = ts + 1
+      end
+   end
+
+   local ms = 0
+   while (ms < maniac_count) and (#choices >= 1) do
+      -- select random index in choices table
+      local pick = math.random(1, #choices)
+
+      -- the player we consider
+      local pply = choices[pick]
+
+      -- make this guy traitor if he was not a traitor last time, or if he makes
+      -- a roll
+      if IsValid(pply) and
+         ((not table.HasValue(prev_roles[ROLE_MANIAC], pply)) or (math.random(1, 3) == 2)) then
+         pply:SetRole(ROLE_MANIAC)
+
+         table.remove(choices, pick)
+         ms = ms + 1
       end
    end
 

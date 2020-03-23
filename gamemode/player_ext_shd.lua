@@ -12,9 +12,11 @@ AccessorFunc(plymeta, "role", "Role", FORCE_NUMBER)
 
 -- Role access
 function plymeta:GetTraitor() return self:GetRole() == ROLE_TRAITOR end
+function plymeta:GetManiac() return self:GetRole() == ROLE_MANIAC end
 function plymeta:GetDetective() return self:GetRole() == ROLE_DETECTIVE end
 
 plymeta.IsTraitor = plymeta.GetTraitor
+plymeta.IsManiac = plymeta.GetManiac
 plymeta.IsDetective = plymeta.GetDetective
 
 function plymeta:IsSpecial() return self:GetRole() != ROLE_INNOCENT end
@@ -28,11 +30,13 @@ end
 function plymeta:IsRole(role) return self:GetRole() == role end
 function plymeta:IsActiveRole(role) return self:IsRole(role) and self:IsActive() end
 function plymeta:IsActiveTraitor() return self:IsActiveRole(ROLE_TRAITOR) end
+function plymeta:IsActiveManiac() return self:IsActiveRole(ROLE_MANIAC) end
 function plymeta:IsActiveDetective() return self:IsActiveRole(ROLE_DETECTIVE) end
 function plymeta:IsActiveSpecial() return self:IsSpecial() and self:IsActive() end
 
 local role_strings = {
    [ROLE_TRAITOR]   = "traitor",
+   [ROLE_MANIAC]   = "maniac",
    [ROLE_INNOCENT]  = "innocent",
    [ROLE_DETECTIVE] = "detective"
 };

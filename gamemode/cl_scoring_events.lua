@@ -48,6 +48,8 @@ Event(EVENT_FINISH,
                      return T("ev_win_traitor")
                   elseif e.win == WIN_INNOCENT then
                      return T("ev_win_inno")
+                  elseif e.win == WIN_MANIAC then
+                     return T("ev_win_maniac")
                   elseif e.win == WIN_TIMELIMIT then
                      return T("ev_win_time")
                   end
@@ -57,6 +59,8 @@ Event(EVENT_FINISH,
                      return star_icon, "Traitors won"
                   elseif e.win == WIN_INNOCENT then
                      return star_icon, "Innocents won"
+                  elseif e.win == WIN_MANIAC then
+                     return star_icon, "Maniac won"
                   else
                      return star_icon, "Timelimit"
                   end

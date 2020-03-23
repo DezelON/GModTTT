@@ -14,6 +14,9 @@ local function GetTextForRole(role)
    elseif role == ROLE_DETECTIVE then
       return GetPTranslation("info_popup_detective", {menukey = Key("+menu_context", "C")})
 
+   elseif role == ROLE_MANIAC then
+      return GetPTranslation("info_popup_maniac", {menukey = Key("+menu_context", "C")})
+
    else
       local traitors = {}
       for _, ply in ipairs(player.GetAll()) do

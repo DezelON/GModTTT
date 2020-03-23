@@ -16,6 +16,7 @@ ROUND_POST   = 4
 ROLE_INNOCENT  = 0
 ROLE_TRAITOR   = 1
 ROLE_DETECTIVE = 2
+ROLE_MANIAC    = 3
 ROLE_NONE = ROLE_INNOCENT
 
 -- Game event log defs
@@ -34,6 +35,7 @@ WIN_NONE      = 1
 WIN_TRAITOR   = 2
 WIN_INNOCENT  = 3
 WIN_TIMELIMIT = 4
+WIN_MANIAC  = 5
 
 -- Weapon categories, you can only carry one of each
 WEAPON_NONE   = 0

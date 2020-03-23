@@ -247,6 +247,7 @@ end
 
 local wintitle = {
    [WIN_TRAITOR] = {txt = "hilite_win_traitors", c = Color(190, 5, 5, 255)},
+   [WIN_MANIAC] = {txt = "hilite_win_maniac", c = Color(190, 5, 190, 255)},
    [WIN_INNOCENT] = {txt = "hilite_win_innocent", c = Color(5, 190, 5, 255)}
 }
 

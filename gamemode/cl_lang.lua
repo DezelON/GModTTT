@@ -202,6 +202,7 @@ end
 
 local bgcolor = {
    [ROLE_TRAITOR]   = Color(150, 0, 0, 200),
+   [ROLE_MANIAC]   = Color(150, 0, 150, 200),
    [ROLE_DETECTIVE] = Color(0, 0, 150, 200),
    [ROLE_INNOCENT]  = Color(0, 50,  0, 200)
 };

@@ -76,6 +76,10 @@ function GetTraitorFilter(alive_only)
    return GetPlayerFilter(function(p) return p:GetTraitor() and (not alive_only or p:IsTerror()) end)
 end
 
+function GetManiacFilter(alive_only)
+   return GetPlayerFilter(function(p) return p:IsManiac() and (not alive_only or p:IsTerror()) end)
+end
+
 function GetDetectiveFilter(alive_only)
    return GetPlayerFilter(function(p) return p:IsDetective() and (not alive_only or p:IsTerror()) end)
 end

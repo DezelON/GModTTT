@@ -508,7 +508,7 @@ local function CheckCreditAward(victim, attacker)
    if not IsValid(victim) then return end
 
    -- DETECTIVE AWARD
-   if IsValid(attacker) and attacker:IsPlayer() and attacker:IsActiveDetective() and victim:IsTraitor() then
+   if IsValid(attacker) and attacker:IsPlayer() and attacker:IsActiveDetective() and (victim:IsTraitor() or victim:IsManiac()) then
       local amt = GetConVarNumber("ttt_det_credits_traitordead") or 1
       for _, ply in ipairs(player.GetAll()) do
          if ply:IsActiveDetective() then
@@ -558,6 +558,54 @@ local function CheckCreditAward(victim, attacker)
 
             for _, ply in ipairs(player.GetAll()) do
                if ply:IsActiveTraitor() then
+                  ply:AddCredits(amt)
+               end
+            end
+         end
+
+         GAMEMODE.AwardedCredits = true
+         GAMEMODE.AwardedCreditsDead = inno_dead + GAMEMODE.AwardedCreditsDead
+      end
+   end
+
+   -- MANIAC AWARD
+   if (not victim:IsManiac()) and (not GAMEMODE.AwardedCredits or GetConVar("ttt_man_credits_award_repeat"):GetBool()) then
+      local inno_alive = 0
+      local inno_dead = 0
+      local inno_total = 0
+
+      for _, ply in ipairs(player.GetAll()) do
+         if not ply:GetManiac() then
+            if ply:IsTerror() then
+               inno_alive = inno_alive + 1
+            elseif ply:IsDeadTerror() then
+               inno_dead = inno_dead + 1
+            end
+         end
+      end
+
+      -- we check this at the death of an innocent who is still technically
+      -- Alive(), so add one to dead count and sub one from living
+      inno_dead = inno_dead + 1
+      inno_alive = math.max(inno_alive - 1, 0)
+      inno_total = inno_dead + inno_alive
+
+      -- Only repeat-award if we have reached the pct again since last time
+      if GAMEMODE.AwardedCredits then
+         inno_dead = inno_dead - GAMEMODE.AwardedCreditsDead
+      end
+
+      local pct = inno_dead / inno_total
+      if pct >= GetConVarNumber("ttt_man_credits_award_pct") then
+         -- Traitors have killed sufficient people to get an award
+         local amt = GetConVarNumber("ttt_man_credits_award_size")
+
+         -- If size is 0, awards are off
+         if amt > 0 then
+            LANG.Msg(GetManiacFilter(true), "credit_mn_all", {num = amt})
+
+            for _, ply in ipairs(player.GetAll()) do
+               if ply:IsActiveManiac() then
                   ply:AddCredits(amt)
                end
             end

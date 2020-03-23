@@ -80,6 +80,7 @@ local namecolor = {
 local rolecolor = {
    default = Color(0, 0, 0, 0),
    traitor = Color(255, 0, 0, 30),
+   maniac = Color(255, 0, 255, 30),
    detective = Color(0, 0, 255, 30)
 }
 
@@ -101,6 +102,8 @@ function GM:TTTScoreboardRowColorForPlayer(ply)
       return rolecolor.traitor
    elseif ply:IsDetective() then
       return rolecolor.detective
+   elseif ply:IsManiac() then
+      return rolecolor.maniac
    end
 
    return rolecolor.default

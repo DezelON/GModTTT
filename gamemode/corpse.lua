@@ -50,13 +50,14 @@ local function IdentifyBody(ply, rag)
       return
    end
    
-   if not hook.Run("TTTCanIdentifyCorpse", ply, rag, (rag.was_role == ROLE_TRAITOR)) then
+   if not hook.Run("TTTCanIdentifyCorpse", ply, rag, (rag.was_role == ROLE_TRAITOR or rag.was_role == ROLE_MANIAC)) then
       return
    end
 
    local finder = ply:Nick()
    local nick = CORPSE.GetPlayerNick(rag, "")
    local traitor = (rag.was_role == ROLE_TRAITOR)
+   local maniac = (rag.was_role == ROLE_MANIAC)
    
    -- Announce body
    if bodyfound:GetBool() and not CORPSE.GetFound(rag, false) then
@@ -66,6 +67,8 @@ local function IdentifyBody(ply, rag)
          roletext = "body_found_t"
       elseif role == ROLE_DETECTIVE then
          roletext = "body_found_d"
+      elseif role == ROLE_MANIAC then
+         roletext = "body_found_m"
       else
          roletext = "body_found_i"
       end
@@ -85,6 +88,8 @@ local function IdentifyBody(ply, rag)
          if traitor then
             -- update innocent's list of traitors
             SendConfirmedTraitors(GetInnocentFilter(false))
+         elseif maniac then
+            SendConfirmedManiacs(GetInnocentFilter(false))
          end
          SCORE:HandleBodyFound(ply, deadply)
       end
@@ -192,13 +197,14 @@ function CORPSE.ShowSearch(ply, rag, covert, long_range)
       return
    end
    
-   if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range, (rag.was_role == ROLE_TRAITOR)) then
+   if not hook.Run("TTTCanSearchCorpse", ply, rag, covert, long_range, (rag.was_role == ROLE_TRAITOR or rag.was_role == ROLE_MANIAC)) then
       return
    end
 
    -- init a heap of data we'll be sending
    local nick  = CORPSE.GetPlayerNick(rag)
    local traitor = (rag.was_role == ROLE_TRAITOR)
+   local maniac = (rag.was_role == ROLE_MANIAC)
    local role  = rag.was_role
    local eq    = rag.equipment or EQUIP_NONE
    local c4    = rag.bomb_wire or -1

@@ -173,6 +173,7 @@ local function ReceiveRole()
 
    Msg("You are: ")
    if client:IsTraitor() then MsgN("TRAITOR")
+   elseif client:IsManiac() then MsgN("MANIAC")
    elseif client:IsDetective() then MsgN("DETECTIVE")
    else MsgN("INNOCENT") end
 end

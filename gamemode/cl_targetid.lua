@@ -193,7 +193,7 @@ function GM:HUDDrawTargetID()
       if ent:GetNWBool("disguised", false) then
          client.last_id = nil
 
-         if client:IsTraitor() or client:IsSpec() then
+         if (client:IsTraitor() and not ent:IsManiac()) or client:IsManiac() or client:IsSpec() then
             text = ent:Nick() .. L.target_disg
          else
             -- Do not show anything
