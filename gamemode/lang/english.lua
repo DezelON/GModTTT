@@ -4,6 +4,7 @@ local L = LANG.CreateLanguage("English")
 
 --- General text used in various places
 L.traitor    = "Traitor"
+L.maniac     = "Maniac"
 L.detective  = "Detective"
 L.innocent   = "Innocent"
 L.last_words = "Last Words"
@@ -24,6 +25,7 @@ L.round_traitors_more = "Traitor, these are your allies: {names}"
 
 L.win_time         = "Time has run out. The Traitors lose."
 L.win_traitor      = "The Traitors have won!"
+L.win_maniac       = "The Maniac have won!"
 L.win_innocent     = "The Traitors have been defeated!"
 L.win_showreport   = "Let's look at the round report for {num} seconds."
 
@@ -34,6 +36,7 @@ L.limit_left       = "{num} round(s) or {time} minutes remaining before the map 
 --- Credit awards
 L.credit_det_all   = "Detectives, you have been awarded {num} equipment credit(s) for your performance."
 L.credit_tr_all    = "Traitors, you have been awarded {num} equipment credit(s) for your performance."
+L.credit_mn_all    = "Maniacs, you have been awarded {num} equipment credit(s) for your performance."
 
 L.credit_kill      = "You have received {num} credit(s) for killing a {role}."
 
@@ -46,6 +49,7 @@ L.body_found       = "{finder} found the body of {victim}. {role}"
 
 -- The {role} in body_found will be replaced by one of the following:
 L.body_found_t     = "They were a Traitor!"
+L.body_found_m     = "They were a Maniac!"
 L.body_found_d     = "They were a Detective."
 L.body_found_i     = "They were Innocent."
 
@@ -153,6 +157,7 @@ L.quick_imwith  = "I'm with {player}."
 L.quick_see     = "I see {player}."
 L.quick_suspect = "{player} acts suspicious."
 L.quick_traitor = "{player} is a Traitor!"
+L.quick_maniac = "{player} is a Maniac!"
 L.quick_inno    = "{player} is innocent."
 L.quick_check   = "Anyone still alive?"
 
@@ -642,6 +647,13 @@ These are your comrades:
 
 Press {menukey} to receive your special equipment!]]
 
+L.info_popup_maniac = [[You are a MANIAC! There are no rules for you!
+
+These are your comrades:
+{traitorlist}
+
+Press {menukey} to receive your special equipment!]]
+
 --- Various other text
 L.name_kick = "A player was automatically kicked for changing their name during a round."
 
@@ -766,6 +778,7 @@ L.report_save_result = "The Event Log has been saved to:"
 
 -- Big title window
 L.hilite_win_traitors = "THE TRAITORS WIN"
+L.hilite_win_maniac   = "THE MANIAC WIN"
 L.hilite_win_innocent = "THE INNOCENT WIN"
 
 L.hilite_players1 = "{numplayers} players took part, {numtraitors} were traitors"
@@ -838,6 +851,7 @@ L.ev_credit      = "{finder} found {num} credit(s) on the corpse of {player}"
 
 L.ev_start       = "The round started"
 L.ev_win_traitor = "The dastardly traitors won the round!"
+L.ev_win_maniac  = "Crazy maniac won the round!"
 L.ev_win_inno    = "The lovable innocent terrorists won the round!"
 L.ev_win_time    = "The traitors ran out of time and lost!"
 
