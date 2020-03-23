@@ -804,7 +804,7 @@ function GM:TTTCheckForWin()
    local maniac_alive = false
    local innocent_alive = false
    for k,v in ipairs(player.GetAll()) do
-      if v:Alive() and v:IsTerror() and v:IsManiac() then
+      if v:Alive() and (v:IsTerror() or v:IsManiac()) then
          if v:GetTraitor() then
             traitor_alive = true
          elseif v:GetManiac() then
@@ -819,13 +819,17 @@ function GM:TTTCheckForWin()
       end
    end
 
+   -- print(traitor_alive)
+   -- print(innocent_alive)
+   -- print(maniac_alive)
+
    if maniac_alive and not traitor_alive and not innocent_alive then
       return WIN_MANIAC
-   elseif traitor_alive and not innocent_alive then
+   elseif traitor_alive and not innocent_alive and not maniac_alive then
       return WIN_TRAITOR
-   elseif not traitor_alive and innocent_alive then
+   elseif not traitor_alive and innocent_alive and not maniac_alive then
       return WIN_INNOCENT
-   elseif not innocent_alive then
+   elseif not innocent_alive and not maniac_alive then
       -- ultimately if no one is alive, traitors win
       return WIN_TRAITOR
    end
