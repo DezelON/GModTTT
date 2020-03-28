@@ -26,6 +26,10 @@ function plymeta:IsActive()
    return self:IsTerror() and GetRoundState() == ROUND_ACTIVE
 end
 
+function plymeta:IsActiveSpecial() return self:GetRole() != ROLE_INNOCENT and self:IsActive() end
+
+function plymeta:IsActiveEvilSpecial() return self:GetRole() != ROLE_INNOCENT and self:GetRole() != ROLE_DETECTIVE and self:IsActive() end
+
 -- convenience functions for common patterns
 function plymeta:IsRole(role) return self:GetRole() == role end
 function plymeta:IsActiveRole(role) return self:IsRole(role) and self:IsActive() end

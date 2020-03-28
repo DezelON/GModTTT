@@ -56,7 +56,7 @@ local TypeToMat = {
    eq_armor="armor",
    eq_radar="radar",
    eq_disg="disguise",
-   role={[ROLE_TRAITOR]="traitor", [ROLE_DETECTIVE]="det", [ROLE_INNOCENT]="inno"},
+   role={[ROLE_TRAITOR]="traitor", [ROLE_DETECTIVE]="det", [ROLE_MANIAC]="maniac", [ROLE_INNOCENT]="inno"},
    c4="code",
    dmg=DmgToMat,
    wep=WeaponToIcon,

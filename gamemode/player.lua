@@ -693,9 +693,11 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
    -- Check for T killing D or vice versa
    if IsValid(attacker) and attacker:IsPlayer() then
       local reward = 0
-      if attacker:IsActiveTraitor() and ply:GetDetective() then
+      if attacker:IsActiveTraitor() and (ply:GetDetective() or ply:GetManiac()) then
          reward = math.ceil(GetConVarNumber("ttt_credits_detectivekill"))
-      elseif attacker:IsActiveDetective() and ply:GetTraitor() then
+      elseif attacker:IsActiveManiac() and (ply:GetDetective() or ply:GetTraitor()) then
+         reward = math.ceil(GetConVarNumber("ttt_man_credits_detectivekill"))
+      elseif attacker:IsActiveDetective() and (ply:GetTraitor() or ply:GetManiac()) then
          reward = math.ceil(GetConVarNumber("ttt_det_credits_traitorkill"))
       end
 

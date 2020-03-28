@@ -34,6 +34,7 @@ local function GetLoadoutWeapons(r)
       local tbl = {
          [ROLE_INNOCENT] = {},
          [ROLE_TRAITOR]  = {},
+         [ROLE_MANIAC]  = {},
          [ROLE_DETECTIVE]= {}
       };
 
@@ -325,7 +326,7 @@ end
 local function OrderEquipment(ply, cmd, args)
    if not IsValid(ply) or #args != 1 then return end
 
-   if not (ply:IsActiveTraitor() or ply:IsActiveDetective()) then return end
+   if not ply:IsActiveSpecial() then return end
 
    -- no credits, can't happen when buying through menu as button will be off
    if ply:GetCredits() < 1 then return end
@@ -420,7 +421,7 @@ function GM:TTTToggleDisguiser(ply, state)
 end
 
 local function SetDisguise(ply, cmd, args)
-   if not IsValid(ply) or not ply:IsActiveTraitor() then return end
+   if not IsValid(ply) or not ply:IsActiveEvilSpecial() then return end
 
    if ply:HasEquipmentItem(EQUIP_DISGUISE) then
       local state = #args == 1 and tobool(args[1])
