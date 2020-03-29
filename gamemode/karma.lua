@@ -151,7 +151,7 @@ function KARMA.Killed(attacker, victim, dmginfo)
    if attacker == victim then return end
    if not attacker:IsPlayer() or not victim:IsPlayer() then return end
 
-   if attacker:GetTraitor() == victim:GetTraitor() then
+   if attacker:GetTraitor() == victim:GetTraitor() and not attacker:GetManiac() and not victim:GetManiac() then
       -- don't penalise attacker for stupid victims
       if WasAvoidable(attacker, victim, dmginfo) then return end
 
