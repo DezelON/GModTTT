@@ -95,15 +95,18 @@ end
 function SCORE:HandleSelection()
    local traitors = {}
    local detectives = {}
+   local maniacs = {}
    for k, ply in ipairs(player.GetAll()) do
       if ply:GetTraitor() then
          table.insert(traitors, ply:SteamID())
       elseif ply:GetDetective() then
          table.insert(detectives, ply:SteamID())
+      elseif ply:GetManiac() then
+         table.insert(maniacs, ply:SteamID())
       end
    end
 
-   self:AddEvent({id=EVENT_SELECTED, traitor_ids=traitors, detective_ids=detectives})
+   self:AddEvent({id=EVENT_SELECTED, traitor_ids=traitors, detective_ids=detectives, maniac_ids=maniacs})
 end
 
 function SCORE:HandleBodyFound(finder, found)
@@ -145,6 +148,7 @@ function SCORE:ApplyEventLogScores(wintype)
    local scores = {}
    local traitors = {}
    local detectives = {}
+   local maniacs = {}
    for k, ply in ipairs(player.GetAll()) do
       scores[ply:SteamID()] = {}
 
@@ -152,13 +156,15 @@ function SCORE:ApplyEventLogScores(wintype)
          table.insert(traitors, ply:SteamID())
       elseif ply:GetDetective() then
          table.insert(detectives, ply:SteamID())
+      elseif ply:GetManiac() then
+         table.insert(maniacs, ply:SteamID())
       end
    end
 
    -- individual scores, and count those left alive
    local alive = {traitors = 0, innos = 0}
    local dead = {traitors = 0, innos = 0}
-   local scored_log = ScoreEventLog(self.Events, scores, traitors, detectives)
+   local scored_log = ScoreEventLog(self.Events, scores, traitors, detectives, maniacs)
    local ply = nil
    for sid, s in pairs(scored_log) do
       ply = player.GetBySteamID(sid)

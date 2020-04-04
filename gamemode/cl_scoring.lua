@@ -479,12 +479,14 @@ function CLSCORE:Init(events)
    local starttime = nil
    local traitors = nil
    local detectives = nil
+   local maniacs = nil
    for k, e in pairs(events) do
       if e.id == EVENT_GAME and e.state == ROUND_ACTIVE then
          starttime = e.t
       elseif e.id == EVENT_SELECTED then
          traitors = e.traitor_ids
          detectives = e.detective_ids
+         maniacs = e.maniac_ids
       end
 
       if starttime and traitors then
@@ -502,7 +504,7 @@ function CLSCORE:Init(events)
       end
    end
 
-   scores = ScoreEventLog(events, scores, traitors, detectives)
+   scores = ScoreEventLog(events, scores, traitors, detectives, maniacs)
 
    self.Players = nicks
    self.Scores = scores
